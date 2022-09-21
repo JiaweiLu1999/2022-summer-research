@@ -1,0 +1,9 @@
+car
+truck
+bus
+person
+stroller
+bicycle
+umbrella
+face
+license

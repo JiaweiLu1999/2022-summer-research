@@ -1,0 +1,174 @@
+############################## application ####################################
+[application]
+
+# Indicates whether the application performance measurement is enabled.
+enable-perf-measurement=1
+
+# The interval (seconds) at which the metrics are sampled and printed.
+perf-measurement-interval-sec=1
+
+############################# tiled-display ###################################
+[tiled-display]
+# Indicates whether tiled display is enabled.
+enable=1
+
+# Number of rows/col in the tiled 2D array.
+rows=1
+columns=1
+
+# Width/Height of the tiled 2D array, in pixels.
+width=1280
+height=720
+
+################################ source0 ######################################
+[source0]
+
+# Enables or disables the source.
+enable=1
+
+# Type of source - 1=CameraV4L2 2=URI 3=MultiURI 4=RTSP
+type=3
+
+# URI to the encoded stream. - uri=<file>/<http>/<rtsp>://....
+uri=file:///home/jl5999/Dev/project/data/2st_test.mp4
+
+# Number of sources. Valid only when type=3.
+num-sources=1
+
+# GPU to be used by the element in case of multiple GPUs.
+gpu-id=0
+
+# Type of CUDA memory element used to allocate for output buffers. 
+# For source of type 2,3 or 4. Not applicable for CSI or USB camera source.
+# 0=memtype_device 1=memtype_pinned 2=memtype_unified
+cudadec-memtype=0
+
+############################### streammux #####################################
+[streammux]
+# Boolean property to inform muxer that sources are live
+# Set to 1 to process @ source framerate, 0 for asap
+live-source=0
+
+# Muxer batch size.
+batch-size=1
+
+# time out in usec, to wait after the first buffer is available
+# to push the batch even if the complete batch is not formed
+batched-push-timeout=40000
+
+# Set muxer output width and height
+width=1280
+height=720
+
+# config-file property is mandatory for any gie section.
+# Other properties are optional and if set will override the properties set in
+# the infer config file.
+[primary-gie]
+
+# Indicates whether the primary GIE must be enabled.
+enable=1
+
+# Unique component ID to be assigned to the nvinfer instance.
+gie-unique-id=1
+
+# GPU to be used.
+gpu-id=0
+
+# Type of CUDA memory element is to allocate for output buffers.
+# 0=nvbuf-mem-default 1=nvbuf-mem-cuda-pinned 
+# 2=nvbuf-mem-cuda-device 3=nvbuf-mem-cuda-unified
+nvbuf-memory-type=0
+
+# Pathname of a configuration file which specifies properties for the Gst-nvinfer plugin. 
+config-file=model_yolo.txt
+
+# Number of consecutive batches to skip for inference.
+interval=2
+
+################################ tracker ######################################
+[tracker]
+
+# Enables or disables the tracker.
+enable=1
+
+# Frame width in pixels.
+tracker-width=640
+
+# Frame height in pixels.
+tracker-height=384
+
+# GPU to be used.
+gpu-id=0
+
+# Pathname for the low-level tracker implementation library.
+ll-lib-file=/opt/nvidia/deepstream/deepstream-6.1/lib/libnvds_nvmultiobjecttracker.so
+
+# Enables batch processing across multiple streams.
+enable-batch-process=1
+
+################################## osd ########################################
+[osd]
+
+# Enables or disables the On-Screen Display (OSD).
+enable=1
+
+# Border width of the bboxes in pixels.
+border-width=2
+
+# Size of the text that describes the objects, in points.
+text-size=15
+
+# The color of the text that describes the objects, in RGBA format.
+text-color=1;1;1;1;
+
+# The background color of the text that describes the objects, in RGBA format.
+text-bg-color=0.3;0.3;0.3;1
+
+# Name of the font for text that describes the objects.
+font=Serif
+
+################################# sink0 #######################################
+[sink0]
+
+# Enables or disables the sink.
+enable=1
+
+# Type of sink - 
+# 1: Fakesink
+# 2: EGL based windowed sink (nveglglessink) will be deprecated
+# 3: Encode + File Save (encoder + muxer + filesink)
+# 4: Encode + RTSP streaming
+# 5: nvdrmvideosink (Jetson only)
+# 6: Message converter + Message broker
+# 7: nv3dsink (Jetson only)
+type=3
+
+# Container to use for the file save. [Only valid for type=3] 1=mp4 2=mkv
+container=1
+
+# The encoder to be used to save the file. 1=h264 2=h265 3=mpeg4
+codec=1
+
+#encoder type 0=Hardware 1=Software
+enc-type=0
+
+# Indicates how fast the stream is to be rendered. 0=asap 1=synchronously
+sync=0
+
+# Bitrate to use for encoding
+bitrate=2000000
+
+#H264 Profile - 0=Baseline 2=Main 4=High
+#H265 Profile - 0=Main 1=Main10
+profile=0
+
+# Pathname of the output encoded file. Only valid for type=3.
+output-file=/home/jl5999/Dev/project/out/new.mp4
+
+# The ID of the source whose buffers this sink must use. 
+source-id=0
+
+################################# tests #######################################
+[tests]
+# Indicates whether input files should be looped infinitely. [DEBUG]
+file-loop=0
